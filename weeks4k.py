@@ -6,17 +6,38 @@ import sys
 import typing
 
 
-WEEKS = int(os.environ.get("WEEKS", "4000"))
-LABELS = bool(os.environ.get("LABELS", ""))
+def main(argv: list[str]) -> None:
+    weeks = int(os.environ.get("WEEKS", "4000"))
+    labels = bool(os.environ.get("LABELS", ""))
 
-WEEKS_IN_MONTH = 4
-DAYS_IN_WEEK = 7
+    begin = datetime.datetime(year=int(argv[0]), month=int(argv[1]), day=int(argv[2]))
+    end = begin + datetime.timedelta(days=weeks * DAYS_IN_WEEK)
+    now = datetime.datetime.now()
 
-BEGIN = datetime.datetime(
-    year=int(sys.argv[1]), month=int(sys.argv[2]), day=int(sys.argv[3])
-)
-END = BEGIN + datetime.timedelta(days=WEEKS * DAYS_IN_WEEK)
-NOW = datetime.datetime.now()
+    week_begin = Week(begin.year, begin.month, Week.get_week_num(begin.day))
+    week_end = Week(end.year, end.month, Week.get_week_num(end.day))
+    week_now = Week(now.year, now.month, Week.get_week_num(now.day))
+
+    if labels:
+        print(
+            functools.reduce(
+                lambda s, m: f"{s}  {m.upper()}", calendar.month_abbr[1:], "    "
+            )
+        )
+
+    for year in range(begin.year, end.year + 1):
+        if labels:
+            print(year, end=" ")
+
+        for month in range(1, 13):
+            for week in range(0, 4):
+                week_cur = Week(year, month, week)
+                if week_cur > week_now or week_cur > week_end or week_cur < week_begin:
+                    print(CHAR_UNDONE, end="")
+                else:
+                    print(CHAR_DONE, end="")
+            print(end=" ")
+        print()
 
 
 class Week(typing.NamedTuple):
@@ -29,30 +50,12 @@ class Week(typing.NamedTuple):
         return min(day // DAYS_IN_WEEK, WEEKS_IN_MONTH)
 
 
-WEEK_BEGIN = Week(BEGIN.year, BEGIN.month, Week.get_week_num(BEGIN.day))
-WEEK_END = Week(END.year, END.month, Week.get_week_num(END.day))
-WEEK_NOW = Week(NOW.year, NOW.month, Week.get_week_num(NOW.day))
+WEEKS_IN_MONTH = 4
+DAYS_IN_WEEK = 7
 
 CHAR_DONE = "\u2588"
 CHAR_UNDONE = "\u00b7"
 
-if LABELS:
-    print(
-        functools.reduce(
-            lambda s, m: f"{s}  {m.upper()}", calendar.month_abbr[1:], "    "
-        )
-    )
 
-for year in range(BEGIN.year, END.year + 1):
-    if LABELS:
-        print(year, end=" ")
-
-    for month in range(1, 13):
-        for week in range(0, 4):
-            week_cur = Week(year, month, week)
-            if week_cur > WEEK_NOW or week_cur > WEEK_END or week_cur < WEEK_BEGIN:
-                print(CHAR_UNDONE, end="")
-            else:
-                print(CHAR_DONE, end="")
-        print(end=" ")
-    print()
+if __name__ == "__main__":
+    main(sys.argv[1:])
