@@ -23,7 +23,7 @@ def main(argv: list[str]) -> None:
     if labels:
         print(
             functools.reduce(
-                lambda s, m: f"{s}  {m.upper()}", calendar.month_abbr[1:], "    "
+                lambda s, m: f"{s}  {m.upper()}", CALENDAR_MONTH_ABBR, "    "
             )
         )
 
@@ -31,8 +31,8 @@ def main(argv: list[str]) -> None:
         if labels:
             print(year, end=" ")
 
-        for month in range(1, 13):
-            for week in range(0, 4):
+        for month in range(1, len(CALENDAR_MONTH_ABBR) + 1):
+            for week in range(0, WEEKS_IN_MONTH):
                 week_cur = Week(year, month, week)
                 if week_cur > week_now or week_cur > week_end or week_cur < week_begin:
                     print(CHAR_UNDONE, end="")
@@ -52,6 +52,7 @@ class Week(typing.NamedTuple):
         return min(day // DAYS_IN_WEEK, WEEKS_IN_MONTH)
 
 
+CALENDAR_MONTH_ABBR = calendar.month_abbr[1:]
 WEEKS_IN_MONTH = 4
 DAYS_IN_WEEK = 7
 
