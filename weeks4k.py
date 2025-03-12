@@ -56,7 +56,7 @@ CALENDAR_MONTH_ABBR = calendar.month_abbr[1:]
 WEEKS_IN_MONTH = 4
 DAYS_IN_WEEK = 7
 
-CHAR_DONE = "\u2588"
+CHAR_DONE = "\u2592"
 CHAR_UNDONE = "\u00b7"
 
 
