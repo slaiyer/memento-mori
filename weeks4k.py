@@ -10,7 +10,7 @@ import typing
 
 def main(argv: list[str]) -> None:
     weeks = int(os.environ.get("WEEKS", "4000"))
-    assert weeks > 0
+    assert 0 < weeks <= 400000
     labels = bool(os.environ.get("LABELS", ""))
 
     begin = datetime.datetime(year=int(argv[0]), month=int(argv[1]), day=int(argv[2]))
