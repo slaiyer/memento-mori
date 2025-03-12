@@ -33,12 +33,16 @@ def main(argv: list[str]) -> None:
             print(year, end=" ")
 
         for month in range(1, len(CALENDAR_MONTH_ABBR) + 1):
-            for week in range(0, WEEKS_IN_MONTH):
+            for week in range(WEEKS_IN_MONTH):
                 week_cur = Week(year, month, week)
-                if week_cur > week_now or week_cur > week_end or week_cur < week_begin:
-                    print(CHAR_UNDONE, end="")
-                else:
-                    print(CHAR_DONE, end="")
+                print(
+                    CHAR_UNDONE
+                    if week_cur > week_now
+                    or week_cur > week_end
+                    or week_cur < week_begin
+                    else CHAR_DONE,
+                    end="",
+                )
             print(end=" ")
         print()
 
