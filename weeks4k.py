@@ -16,7 +16,7 @@ CHAR_DONE: Final = "\u2592"
 CHAR_UNDONE: Final = "\u00b7"
 
 
-def main(argv: list[str]) -> None:
+def main(*, argv: list[str]) -> None:
     weeks: Final = int(os.environ.get("WEEKS", "4000"))
     assert 0 < weeks <= 400_000
     labels: Final = bool(os.environ.get("LABELS", ""))
@@ -27,9 +27,9 @@ def main(argv: list[str]) -> None:
     end: Final = begin + datetime.timedelta(days=weeks * DAYS_IN_WEEK)
     now: Final = datetime.datetime.now()
 
-    week_begin: Final = Week(begin.year, begin.month, Week.get_week_num(begin.day))
-    week_end: Final = Week(end.year, end.month, Week.get_week_num(end.day))
-    week_now: Final = Week(now.year, now.month, Week.get_week_num(now.day))
+    week_begin: Final = Week(begin.year, begin.month, Week.get_week_num(day=begin.day))
+    week_end: Final = Week(end.year, end.month, Week.get_week_num(day=end.day))
+    week_now: Final = Week(now.year, now.month, Week.get_week_num(day=now.day))
 
     if labels:
         print(
@@ -63,9 +63,9 @@ class Week(NamedTuple):
     week_in_month: int
 
     @staticmethod
-    def get_week_num(day: int) -> int:
+    def get_week_num(*, day: int) -> int:
         return min(day // DAYS_IN_WEEK, WEEKS_IN_MONTH)
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    main(argv=sys.argv[1:])
