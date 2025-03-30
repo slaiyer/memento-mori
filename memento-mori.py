@@ -46,23 +46,27 @@ def compute_calendar(
     end: datetime.datetime,
     now: datetime.datetime,
 ) -> Generator[STATUS_YEAR]:
+    week_begin = Week(
+        year=begin.year,
+        month=begin.month,
+        week_in_month=Week.get_week_num(day=begin.day),
+    )
+    week_end = Week(
+        year=end.year,
+        month=end.month,
+        week_in_month=Week.get_week_num(day=end.day),
+    )
+    week_now = Week(
+        year=now.year,
+        month=now.month,
+        week_in_month=Week.get_week_num(day=now.day),
+    )
+
     yield from (
         compute_calendar_year(
-            week_begin=Week(
-                year=begin.year,
-                month=begin.month,
-                week_in_month=Week.get_week_num(day=begin.day),
-            ),
-            week_end=Week(
-                year=end.year,
-                month=end.month,
-                week_in_month=Week.get_week_num(day=end.day),
-            ),
-            week_now=Week(
-                year=now.year,
-                month=now.month,
-                week_in_month=Week.get_week_num(day=now.day),
-            ),
+            week_begin=week_begin,
+            week_end=week_end,
+            week_now=week_now,
             year=year,
         )
         for year in range(begin.year, end.year + 1)
@@ -84,7 +88,7 @@ def compute_calendar_year(
             year=year,
             month=month,
         )
-        for month in range(1, MONTHS_IN_YEAR + 1)
+        for month in range(MONTHS_IN_YEAR)
     )
 
 
