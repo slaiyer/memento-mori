@@ -16,14 +16,8 @@ CHAR_DONE: Final = "\u2592"
 CHAR_UNDONE: Final = "\u00b7"
 
 
-def main(*, argv: list[str]) -> None:
-    weeks: Final = int(os.environ.get("WEEKS", "4000"))
-    assert 0 < weeks <= 400_000
-    labels: Final = bool(os.environ.get("LABELS", ""))
-
-    begin: Final = datetime.datetime(
-        year=int(argv[0]), month=int(argv[1]), day=int(argv[2])
-    )
+def main(*, year: int, month: int, day: int, weeks: int, labels: bool) -> None:
+    begin: Final = datetime.datetime(year=year, month=month, day=day)
     end: Final = begin + datetime.timedelta(days=weeks * DAYS_IN_WEEK)
     now: Final = datetime.datetime.now()
 
@@ -68,4 +62,9 @@ class Week(NamedTuple):
 
 
 if __name__ == "__main__":
-    main(argv=sys.argv[1:])
+    weeks: Final = int(os.environ.get("WEEKS", "4000"))
+    assert 0 < weeks <= 400_000
+    labels: Final = bool(os.environ.get("LABELS", ""))
+    year, month, day = map(lambda s: int(s), sys.argv[1:4])
+
+    main(year=year, month=month, day=day, weeks=weeks, labels=labels)
