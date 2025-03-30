@@ -1,5 +1,5 @@
-# ~4000 weeks
+# Memento mori
 
 ```shell
-WEEKS=5000 LABELS=1 ./weeks4k.py YYYY MM DD
+WEEKS=5000 LABELS=1 ./memento-mori.py YYYY MM DD
 ```
