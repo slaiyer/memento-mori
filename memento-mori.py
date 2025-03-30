@@ -46,17 +46,17 @@ def compute_calendar(
     end: datetime.datetime,
     now: datetime.datetime,
 ) -> Generator[STATUS_YEAR]:
-    week_begin = Week(
+    week_begin: Final = Week(
         year=begin.year,
         month=begin.month,
         week_in_month=Week.get_week_num(day=begin.day),
     )
-    week_end = Week(
+    week_end: Final = Week(
         year=end.year,
         month=end.month,
         week_in_month=Week.get_week_num(day=end.day),
     )
-    week_now = Week(
+    week_now: Final = Week(
         year=now.year,
         month=now.month,
         week_in_month=Week.get_week_num(day=now.day),
