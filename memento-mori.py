@@ -5,7 +5,7 @@ import datetime
 import functools
 import os
 import sys
-from typing import Final, Generator, Iterable, NamedTuple
+from typing import Final, Generator, Iterable, Mapping, NamedTuple
 
 
 CALENDAR_MONTH_ABBR: Final = calendar.month_abbr[1:]
@@ -13,10 +13,10 @@ MONTHS_IN_YEAR: Final = len(CALENDAR_MONTH_ABBR)
 WEEKS_IN_MONTH: Final = 4
 DAYS_IN_WEEK: Final = len(calendar.day_name)
 
-RENDER_CHARS: Final = [
-    "\u2592",
-    "\u00b7",
-]
+RENDER_CHARS: Final[Mapping[bool, str]] = {
+    False: "\u2592",
+    True: "\u00b7",
+}
 
 
 class Week(NamedTuple):
