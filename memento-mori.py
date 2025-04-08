@@ -13,11 +13,6 @@ MONTHS_IN_YEAR: Final = len(CALENDAR_MONTH_ABBR)
 WEEKS_IN_MONTH: Final = 4
 DAYS_IN_WEEK: Final = len(calendar.day_name)
 
-RENDER_CHARS: Final[Mapping[bool, str]] = {
-    False: "\u2592",
-    True: "\u00b7",
-}
-
 
 class Week(NamedTuple):
     year: int
@@ -38,6 +33,11 @@ class Week(NamedTuple):
 type STATUS_WEEK = bool
 type STATUS_MONTH = Generator[STATUS_WEEK]
 type STATUS_YEAR = Generator[STATUS_MONTH]
+
+RENDER_CHARS: Final[Mapping[STATUS_WEEK, str]] = {
+    False: "\u2592",
+    True: "\u00b7",
+}
 
 
 def compute_calendar(
