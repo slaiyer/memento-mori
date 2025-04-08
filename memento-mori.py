@@ -5,6 +5,7 @@ import datetime
 import functools
 import os
 import sys
+import time
 from typing import Final, Generator, Iterable, Mapping, NamedTuple
 
 
@@ -130,6 +131,7 @@ def render_calendar(
     years: Iterable[STATUS_YEAR],
     year_begin: int,
     labels: bool,
+    delay: float,
 ) -> None:
     if labels:
         print(
@@ -149,7 +151,12 @@ def render_calendar(
 
         for month in year:
             for week_done in month:
-                print(RENDER_CHARS[week_done], end="")
+                print(
+                    RENDER_CHARS[week_done],
+                    end="",
+                    flush=True,
+                )
+                time.sleep(delay)
 
             print(end=" ")
 
@@ -168,6 +175,14 @@ if __name__ == "__main__":
     LABELS: Final = bool(
         os.environ.get("LABELS"),
     )
+
+    DELAY: Final = float(
+        os.environ.get(
+            "DELAY",
+            "0.0",
+        ),
+    )
+    assert DELAY >= 0.0
 
     YEAR_BEGIN, MONTH_BEGIN, DAY_BEGIN = map(
         lambda s: int(s),
@@ -188,4 +203,5 @@ if __name__ == "__main__":
         ),
         year_begin=BEGIN.year,
         labels=LABELS,
+        delay=DELAY,
     )
