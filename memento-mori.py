@@ -5,7 +5,7 @@ import datetime
 import functools
 import os
 import sys
-from typing import Final, Generator, NamedTuple
+from typing import Final, Generator, Iterable, NamedTuple
 
 
 CALENDAR_MONTH_ABBR: Final = calendar.month_abbr[1:]
@@ -127,9 +127,8 @@ def compute_calendar_week(
 
 def render_calendar(
     *,
-    begin: datetime.datetime,
-    end: datetime.datetime,
-    now: datetime.datetime,
+    years: Iterable[STATUS_YEAR],
+    year_begin: int,
     labels: bool,
 ) -> None:
     if labels:
@@ -141,27 +140,18 @@ def render_calendar(
             )
         )
 
-    for idx, year in enumerate(
-        compute_calendar(
-            begin=begin,
-            end=end,
-            now=now,
-        )
+    for label, year in enumerate(
+        iterable=years,
+        start=year_begin,
     ):
         if labels:
-            print(
-                begin.year + idx,
-                end=" ",
-            )
+            print(label, end=" ")
 
         for month in year:
             for week_done in month:
-                print(
-                    RENDER_CHARS[week_done],
-                    end="",
-                )
+                print(RENDER_CHARS[week_done], end="")
 
-            print(" ", end="")
+            print(end=" ")
 
         print()
 
@@ -176,25 +166,26 @@ if __name__ == "__main__":
     assert 0 < WEEKS <= 400_000
 
     LABELS: Final = bool(
-        os.environ.get("LABELS", ""),
+        os.environ.get("LABELS"),
     )
 
-    YEAR, MONTH, DAY = map(
+    YEAR_BEGIN, MONTH_BEGIN, DAY_BEGIN = map(
         lambda s: int(s),
         sys.argv[1:4],
     )
 
     BEGIN: Final = datetime.datetime(
-        year=YEAR,
-        month=MONTH,
-        day=DAY,
+        year=YEAR_BEGIN,
+        month=MONTH_BEGIN,
+        day=DAY_BEGIN,
     )
 
-    END: Final = BEGIN + datetime.timedelta(days=WEEKS * DAYS_IN_WEEK)
-
     render_calendar(
-        begin=BEGIN,
-        end=END,
-        now=datetime.datetime.now(),
+        years=compute_calendar(
+            begin=BEGIN,
+            end=BEGIN + datetime.timedelta(days=WEEKS * DAYS_IN_WEEK),
+            now=datetime.datetime.now(),
+        ),
+        year_begin=BEGIN.year,
         labels=LABELS,
     )
