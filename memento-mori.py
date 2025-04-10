@@ -23,6 +23,57 @@ RENDER_CHARS: Final = {
 }
 
 
+def main() -> None:
+    weeks: Final = int(
+        os.environ.get(
+            "WEEKS",
+            "4000",
+        )
+    )
+    assert 0 < weeks <= 400_000
+
+    labels: Final = bool(
+        os.environ.get("LABELS"),
+    )
+
+    delay: Final = float(
+        os.environ.get(
+            "DELAY",
+            "0.0",
+        ),
+    )
+    assert delay >= 0.0
+
+    year_begin, month_begin, day_begin = map(
+        lambda s: int(s),
+        sys.argv[1:4],
+    )
+
+    begin: Final = datetime.datetime(
+        year=year_begin,
+        month=month_begin,
+        day=day_begin,
+    )
+
+    calendar: Final = compute_calendar(
+        begin=begin,
+        end=begin + datetime.timedelta(days=weeks * DAYS_IN_WEEK),
+        now=datetime.datetime.now(),
+        days_in_week=DAYS_IN_WEEK,
+        weeks_in_month=WEEKS_IN_MONTH,
+        months_in_year=MONTHS_IN_YEAR,
+    )
+
+    render_calendar(
+        years=calendar,
+        year_begin=begin.year,
+        labels=labels,
+        header=CALENDAR_MONTH_ABBR,
+        delay=delay,
+        render_chars=RENDER_CHARS,
+    )
+
+
 class Week(NamedTuple):
     year: int
     month: int
@@ -39,57 +90,6 @@ class Week(NamedTuple):
             day // days_in_week,
             weeks_in_month,
         )
-
-
-def main() -> None:
-    WEEKS: Final = int(
-        os.environ.get(
-            "WEEKS",
-            "4000",
-        )
-    )
-    assert 0 < WEEKS <= 400_000
-
-    LABELS: Final = bool(
-        os.environ.get("LABELS"),
-    )
-
-    DELAY: Final = float(
-        os.environ.get(
-            "DELAY",
-            "0.0",
-        ),
-    )
-    assert DELAY >= 0.0
-
-    YEAR_BEGIN, MONTH_BEGIN, DAY_BEGIN = map(
-        lambda s: int(s),
-        sys.argv[1:4],
-    )
-
-    BEGIN: Final = datetime.datetime(
-        year=YEAR_BEGIN,
-        month=MONTH_BEGIN,
-        day=DAY_BEGIN,
-    )
-
-    calendar: Final = compute_calendar(
-        begin=BEGIN,
-        end=BEGIN + datetime.timedelta(days=WEEKS * DAYS_IN_WEEK),
-        now=datetime.datetime.now(),
-        days_in_week=DAYS_IN_WEEK,
-        weeks_in_month=WEEKS_IN_MONTH,
-        months_in_year=MONTHS_IN_YEAR,
-    )
-
-    render_calendar(
-        years=calendar,
-        year_begin=BEGIN.year,
-        labels=LABELS,
-        header=CALENDAR_MONTH_ABBR,
-        delay=DELAY,
-        render_chars=RENDER_CHARS,
-    )
 
 
 def compute_calendar(
