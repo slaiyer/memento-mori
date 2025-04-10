@@ -36,7 +36,7 @@ def main() -> None:
     assert delay >= 0.0
 
     year_begin, month_begin, day_begin = map(
-        lambda s: int(s),
+        lambda arg: int(arg),
         sys.argv[1:4],
     )
 
@@ -68,7 +68,7 @@ def main() -> None:
         years=calendar_iter,
         year_begin=begin.year,
         labels=labels,
-        header=calendar_month_abbr,
+        month_abbr=calendar_month_abbr,
         delay=delay,
         render_chars=render_chars,
     )
@@ -197,15 +197,15 @@ def render_calendar(
     years: Iterable[STATUS_YEAR],
     year_begin: int,
     labels: bool,
-    header: Iterable[str],
+    month_abbr: Iterable[str],
     delay: float,
     render_chars: Mapping[STATUS_WEEK, str],
 ) -> None:
     if labels:
         print(
             functools.reduce(
-                lambda s, m: f"{s}  {m.upper()}",
-                header,
+                lambda header, month: f"{header}  {month.upper()}",
+                month_abbr,
                 "    ",
             )
         )
