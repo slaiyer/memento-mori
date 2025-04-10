@@ -6,7 +6,7 @@ import functools
 import os
 import sys
 import time
-from typing import Final, Generator, Iterable, Mapping, NamedTuple, Sequence
+from typing import Final, Generator, Iterable, Mapping, NamedTuple
 
 
 type STATUS_WEEK = bool
@@ -197,7 +197,7 @@ def render_calendar(
     years: Iterable[STATUS_YEAR],
     year_begin: int,
     labels: bool,
-    header: Sequence[str],
+    header: Iterable[str],
     delay: float,
     render_chars: Mapping[STATUS_WEEK, str],
 ) -> None:
