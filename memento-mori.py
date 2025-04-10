@@ -210,12 +210,6 @@ def render_calendar(
             )
         )
 
-    render_week: Final = functools.partial(
-        print,
-        end="",
-        flush=delay > 0.0,
-    )
-
     for label, year in enumerate(
         iterable=years,
         start=year_begin,
@@ -225,8 +219,10 @@ def render_calendar(
 
         for month in year:
             for week_done in month:
-                render_week(
+                print(
                     render_chars[week_done],
+                    end="",
+                    flush=delay > 0.0,
                 )
                 time.sleep(delay)
 
