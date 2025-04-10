@@ -13,15 +13,6 @@ type STATUS_WEEK = bool
 type STATUS_MONTH = Generator[STATUS_WEEK]
 type STATUS_YEAR = Generator[STATUS_MONTH]
 
-CALENDAR_MONTH_ABBR: Final = calendar.month_abbr[1:]
-MONTHS_IN_YEAR: Final = len(CALENDAR_MONTH_ABBR)
-WEEKS_IN_MONTH: Final = 4
-DAYS_IN_WEEK: Final = len(calendar.day_name)
-RENDER_CHARS: Final = {
-    False: "\u2592",
-    True: "\u00b7",
-}
-
 
 def main() -> None:
     weeks: Final = int(
@@ -55,22 +46,31 @@ def main() -> None:
         day=day_begin,
     )
 
-    calendar: Final = compute_calendar(
+    calendar_month_abbr: Final = calendar.month_abbr[1:]
+    months_in_year: Final = len(calendar_month_abbr)
+    weeks_in_month: Final = 4
+    days_in_week: Final = len(calendar.day_name)
+    render_chars: Final = {
+        False: "\u2592",
+        True: "\u00b7",
+    }
+
+    calendar_iter: Final = compute_calendar(
         begin=begin,
-        end=begin + datetime.timedelta(days=weeks * DAYS_IN_WEEK),
+        end=begin + datetime.timedelta(days=weeks * days_in_week),
         now=datetime.datetime.now(),
-        days_in_week=DAYS_IN_WEEK,
-        weeks_in_month=WEEKS_IN_MONTH,
-        months_in_year=MONTHS_IN_YEAR,
+        days_in_week=days_in_week,
+        weeks_in_month=weeks_in_month,
+        months_in_year=months_in_year,
     )
 
     render_calendar(
-        years=calendar,
+        years=calendar_iter,
         year_begin=begin.year,
         labels=labels,
-        header=CALENDAR_MONTH_ABBR,
+        header=calendar_month_abbr,
         delay=delay,
-        render_chars=RENDER_CHARS,
+        render_chars=render_chars,
     )
 
 
