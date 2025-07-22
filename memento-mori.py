@@ -210,6 +210,8 @@ def render_calendar(
             )
         )
 
+    immediate_flush: Final = delay > 0.0
+
     for label, year in enumerate(
         iterable=years,
         start=year_begin,
@@ -222,9 +224,11 @@ def render_calendar(
                 print(
                     render_chars[week_done],
                     end="",
-                    flush=delay > 0.0,
+                    flush=immediate_flush,
                 )
-                time.sleep(delay)
+
+                if immediate_flush:
+                    time.sleep(delay)
 
             print(end=" ")
 
