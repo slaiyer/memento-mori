@@ -109,17 +109,17 @@ def compute_calendar(
 
     week_begin: Final = Week(
         year=begin.year,
-        month=begin.month,
+        month=begin.month - 1,  # `datetime` months are 1-indexed
         week_in_month=get_week_num(day=begin.day),
     )
     week_end: Final = Week(
         year=end.year,
-        month=end.month,
+        month=end.month - 1,
         week_in_month=get_week_num(day=end.day),
     )
     week_now: Final = Week(
         year=now.year,
-        month=now.month - 1,  # `datetime` months are 1-indexed
+        month=now.month - 1,
         week_in_month=get_week_num(day=now.day),
     )
 
