@@ -21,7 +21,7 @@ def main() -> None:
             "69",
         )
     )
-    assert 0 < years <= 200
+    assert 0 < years <= 1_000
 
     labels: Final = bool(
         os.environ.get("LABELS"),
