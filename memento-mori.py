@@ -24,7 +24,10 @@ def main() -> None:
     assert 0 < years <= 1_000
 
     labels: Final = bool(
-        os.environ.get("LABELS"),
+        os.environ.get(
+            "LABELS",
+            "False",
+        ),
     )
 
     delay: Final = float(
@@ -47,6 +50,7 @@ def main() -> None:
     )
 
     calendar_month_abbr: Final = calendar.month_abbr[1:]
+    days_in_year: Final = 365.2422
     months_in_year: Final = len(calendar_month_abbr)
     weeks_in_month: Final = 4
     days_in_week: Final = len(calendar.day_name)
@@ -57,7 +61,7 @@ def main() -> None:
 
     calendar_iter: Final = compute_calendar(
         begin=begin,
-        end=begin + datetime.timedelta(days=years * 365.2422),
+        end=begin + datetime.timedelta(days=years * days_in_year),
         now=datetime.datetime.now(),
         days_in_week=days_in_week,
         weeks_in_month=weeks_in_month,
