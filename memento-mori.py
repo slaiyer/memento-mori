@@ -15,13 +15,13 @@ type STATUS_YEAR = Generator[STATUS_MONTH]
 
 
 def main() -> None:
-    weeks: Final = int(
+    years: Final = int(
         os.environ.get(
-            "WEEKS",
-            "4000",
+            "YEARS",
+            "69",
         )
     )
-    assert 0 < weeks <= 400_000
+    assert 0 < years <= 200
 
     labels: Final = bool(
         os.environ.get("LABELS"),
@@ -57,7 +57,7 @@ def main() -> None:
 
     calendar_iter: Final = compute_calendar(
         begin=begin,
-        end=begin + datetime.timedelta(days=weeks * days_in_week),
+        end=begin + datetime.timedelta(days=years * 365.2422),
         now=datetime.datetime.now(),
         days_in_week=days_in_week,
         weeks_in_month=weeks_in_month,
