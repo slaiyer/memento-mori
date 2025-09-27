@@ -26,7 +26,6 @@ def main() -> None:
     labels: Final = bool(
         os.environ.get(
             "LABELS",
-            "False",
         ),
     )
 
