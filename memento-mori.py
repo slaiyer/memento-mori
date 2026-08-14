@@ -29,13 +29,13 @@ def main() -> None:
         ),
     )
 
-    delay: Final = float(
+    delay_ms: Final = int(
         os.environ.get(
-            "DELAY",
-            "0.0",
+            "DELAY_MS",
+            "0",
         ),
     )
-    assert delay >= 0.0
+    assert delay_ms >= 0
 
     year_begin, month_begin, day_begin = map(
         lambda arg: int(arg),
@@ -72,7 +72,7 @@ def main() -> None:
         year_begin=begin.year,
         labels=labels,
         month_abbr=calendar_month_abbr,
-        delay=delay,
+        delay_ms=delay_ms,
         render_chars=render_chars,
     )
 
@@ -201,7 +201,7 @@ def render_calendar(
     year_begin: int,
     labels: bool,
     month_abbr: Iterable[str],
-    delay: float,
+    delay_ms: int,
     render_chars: Mapping[STATUS_WEEK, str],
 ) -> None:
     if labels:
@@ -213,7 +213,8 @@ def render_calendar(
             )
         )
 
-    immediate_flush: Final = delay > 0.0
+    is_sequenced: Final = delay_ms > 0
+    delay_sec = delay_ms / 1_000.0
 
     for label, year in enumerate(
         iterable=years,
@@ -227,11 +228,11 @@ def render_calendar(
                 print(
                     render_chars[week_done],
                     end="",
-                    flush=immediate_flush,
+                    flush=is_sequenced,
                 )
 
-                if immediate_flush:
-                    time.sleep(delay)
+                if is_sequenced:
+                    time.sleep(delay_sec)
 
             print(end=" ")
 
